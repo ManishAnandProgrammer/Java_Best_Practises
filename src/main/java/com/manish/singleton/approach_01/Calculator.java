@@ -14,4 +14,8 @@ public class Calculator implements Serializable {
     public int sum(int firstNumber, int secondNumber) {
         return firstNumber + secondNumber;
     }
+
+    protected Object readResolve() {
+        return CALCULATOR;
+    }
 }

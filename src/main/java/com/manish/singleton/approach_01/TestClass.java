@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.manish.exceptions.NonDeterministicStateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,12 +81,20 @@ public class TestClass {
     private void checkIfCalculatorClassImmuneToSerialization() {
         String fileName = "serialized_files/calculator.ser";
 
-        if(serializeObjectToFile(fileName)) {
-            checkDeserializedObjectIsSameAsSingletonObject(fileName);
+        if(saveSerializeObjectToFile(fileName)) {
+            try {
+                boolean isSame = checkDeserializedObjectIsSameAsSingletonObject(fileName);
+                if(!isSame) {
+                    LOGGER.info("Immune to Serialization Attack..!");
+                }
+            } catch (NonDeterministicStateException nonDeterministicStateException) {
+                LOGGER.error("Can't find Calculator Class is Serialization attack immune or not",
+                        nonDeterministicStateException);
+            }
         }
     }
 
-    private boolean serializeObjectToFile(final String fileName) {
+    private boolean saveSerializeObjectToFile(final String fileName) {
         Calculator calculator = Calculator.CALCULATOR;
         try(FileOutputStream fileOutputStream = new FileOutputStream(fileName);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
@@ -102,7 +112,7 @@ public class TestClass {
         }
     }
 
-    private void checkDeserializedObjectIsSameAsSingletonObject(final String fileName) {
+    private boolean checkDeserializedObjectIsSameAsSingletonObject(final String fileName) {
         try(FileInputStream fileInputStream = new FileInputStream(fileName);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
 
@@ -113,14 +123,19 @@ public class TestClass {
 
             if(calculatorFromFile != originalSingletonCalculator) {
                 LOGGER.error("Calculator class is not Immune to Serialization Attack..!");
+                return true;
             }
 
+            return false;
         } catch (FileNotFoundException fileNotFoundException) {
             LOGGER.error("File Not Found With Name:: {}", fileName, fileNotFoundException);
+            throw new NonDeterministicStateException("File Not Found With Name:: " + fileName, fileNotFoundException);
         } catch (IOException ioException) {
             LOGGER.error("IO exception in Reading Object From File:: {}", fileName, ioException);
+            throw new NonDeterministicStateException("IO exception in Reading Object From File:: " + fileName, ioException);
         } catch (ClassNotFoundException classNotFoundException) {
             LOGGER.error("Class Not Found In Deserialization of Calculator ", classNotFoundException);
+            throw new NonDeterministicStateException("Class Not Found In Deserialization of Calculator " , classNotFoundException);
         }
     }
 }
