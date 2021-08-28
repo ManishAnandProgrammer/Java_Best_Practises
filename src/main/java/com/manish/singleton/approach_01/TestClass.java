@@ -84,7 +84,7 @@ public class TestClass {
         }
     }
 
-    private boolean serializeObjectToFile(String fileName) {
+    private boolean serializeObjectToFile(final String fileName) {
         Calculator calculator = Calculator.CALCULATOR;
         try(FileOutputStream fileOutputStream = new FileOutputStream(fileName);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
@@ -102,7 +102,7 @@ public class TestClass {
         }
     }
 
-    private void checkDeserializedObjectIsSameAsSingletonObject(String fileName) {
+    private void checkDeserializedObjectIsSameAsSingletonObject(final String fileName) {
         try(FileInputStream fileInputStream = new FileInputStream(fileName);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
 
@@ -119,8 +119,8 @@ public class TestClass {
             LOGGER.error("File Not Found With Name:: {}", fileName, fileNotFoundException);
         } catch (IOException ioException) {
             LOGGER.error("IO exception in Reading Object From File:: {}", fileName, ioException);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException classNotFoundException) {
+            LOGGER.error("Class Not Found In Deserialization of Calculator ", classNotFoundException);
         }
     }
 }
