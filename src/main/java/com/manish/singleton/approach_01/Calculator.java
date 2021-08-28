@@ -3,7 +3,7 @@ package com.manish.singleton.approach_01;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Calculator implements Serializable {
+public class Calculator implements Serializable, Cloneable {
 
     public static final Calculator CALCULATOR = new Calculator();
     private Calculator() {
@@ -17,5 +17,10 @@ public class Calculator implements Serializable {
 
     protected Object readResolve() {
         return CALCULATOR;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException();
     }
 }

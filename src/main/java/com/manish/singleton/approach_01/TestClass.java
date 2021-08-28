@@ -39,6 +39,12 @@ public class TestClass {
         *   class, than it is not well written singleton..!
         * */
         testClass.checkIfCalculatorClassImmuneToSerialization();
+
+        /**
+         *  if we can create clone of singleton class than
+         *  it is not singleton in true sense..!
+         * */
+        testClass.checkIfCalculatorClassIsImmuneToCloning();
     }
 
     private void checkAllCalculatorInstanceReferringToSameObject() {
@@ -136,6 +142,19 @@ public class TestClass {
         } catch (ClassNotFoundException classNotFoundException) {
             LOGGER.error("Class Not Found In Deserialization of Calculator ", classNotFoundException);
             throw new NonDeterministicStateException("Class Not Found In Deserialization of Calculator " , classNotFoundException);
+        }
+    }
+
+    private void checkIfCalculatorClassIsImmuneToCloning() {
+        Calculator calculator = Calculator.CALCULATOR;
+        try {
+            Calculator calculatorClone = (Calculator) calculator.clone();
+            LOGGER.info("Original Calculator Object {}", calculator);
+            LOGGER.info("Cloned Calculator Object {}", calculatorClone);
+            LOGGER.error("Calculator class is not immune to Clone attack ");
+        } catch (CloneNotSupportedException e) {
+            LOGGER.error("Exception in Cloning Calculator Object ", e);
+            LOGGER.info("Calculator class is Clone attack proof");
         }
     }
 }
