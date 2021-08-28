@@ -1,8 +1,9 @@
 package com.manish.singleton.approach_01;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Calculator {
+public class Calculator implements Serializable {
 
     public static final Calculator CALCULATOR = new Calculator();
     private Calculator() {
