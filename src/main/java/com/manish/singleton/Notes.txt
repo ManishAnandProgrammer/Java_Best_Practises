@@ -1,0 +1,14 @@
+Referenced From:: Effective Java Third Edition
+
+
+Approach_01:
+    *   The main advantage of the public field approach is that the API makes it clear
+        that the class is a singleton: the public static field is final, so it will always contain
+        the same object reference.
+    *   The second advantage is that it’s simpler.
+
+Approach_02:
+    *   One advantage of the static factory approach is that it gives you the flexibility
+        to change your mind about whether the class is a singleton without changing its
+        API. The factory method returns the sole instance, but it could be modified to
+        return, say, a separate instance for each thread that invokes it.
