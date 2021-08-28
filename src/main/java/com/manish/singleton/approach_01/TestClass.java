@@ -5,8 +5,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestClass {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestClass.class);
+
     public static void main(String[] args) {
         TestClass testClass = new TestClass();
         /*
@@ -37,8 +41,8 @@ public class TestClass {
                 if(calculator != null)
                     System.err.println("Singleton Calculator is not immune to reflection..!");
             } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
-                System.out.println("Immune to Reflection Attack..!");
+                LOGGER.error("Exception in Creating Object By Reflection", e);
+                LOGGER.info("Immune to Reflection Attack..!");
             }
         }
     }
@@ -55,9 +59,9 @@ public class TestClass {
 
 
         if(!isReferringToSameObject)
-            System.err.println("Broken Singleton..!");
+            LOGGER.error("Broken Singleton..!");
         else
-            System.out.println("All Objects Are Referring To Same Object..!");
+           LOGGER.info("All Objects Are Referring To Same Object..!");
     }
 
     private boolean isReferringToSameObject(Calculator ...calculators) {
